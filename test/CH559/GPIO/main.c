@@ -1,4 +1,16 @@
-#include "GPIO.C"
+#include "CH559.H"
+//#include <stdio.h>
+//#include <string.h>
+
+
+#include "DEBUG.C"
+//#include "DEBUG.H"
+
+//#include "GPIO.C"
+
+void CH559GPIOInterruptInit();
+UINT8 CH559GPIOModeSelt(UINT8 Port,UINT8 Mode,UINT8 PinNum);
+sbit	LED=P1^4;
 
 main( ) 
 {
@@ -21,7 +33,7 @@ main( )
 	  
 	
     while(1){
-			CH559GPIOModeSelt(1, 2);
+			CH559GPIOModeSelt(1, 2, 4);
 			
 			mDelaymS(500);
 			

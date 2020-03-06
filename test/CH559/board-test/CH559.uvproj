@@ -12,14 +12,14 @@
       <ToolsetName>MCS-51</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
-          <Device>SST89C54</Device>
-          <Vendor>SST</Vendor>
-          <Cpu>IRAM(0-0xFF) IROM(0-0x3FFF) CLOCK(33000000)</Cpu>
+          <Device>CH559</Device>
+          <Vendor>WCH</Vendor>
+          <Cpu>IRAM(0-0xFF) XRAM(0-0x3FFF)  IROM(0-0x3FFF) CLOCK(56000000)</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile>"LIB\STARTUP.A51" ("Standard 8051 Startup Code")</StartupFile>
           <FlashDriverDll></FlashDriverDll>
-          <DeviceId>2932</DeviceId>
-          <RegisterFile>REG52.H</RegisterFile>
+          <DeviceId>0</DeviceId>
+          <RegisterFile>CH559.H</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -35,8 +35,8 @@
           <BinPath></BinPath>
           <IncludePath></IncludePath>
           <LibPath></LibPath>
-          <RegisterFilePath></RegisterFilePath>
-          <DBRegisterFilePath></DBRegisterFilePath>
+          <RegisterFilePath>WCH\</RegisterFilePath>
+          <DBRegisterFilePath>WCH\</DBRegisterFilePath>
           <TargetStatus>
             <Error>0</Error>
             <ExitCodeStop>0</ExitCodeStop>
@@ -109,11 +109,11 @@
           <SimDllName>S8051.DLL</SimDllName>
           <SimDllArguments></SimDllArguments>
           <SimDlgDll>DP51.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pSST5X</SimDlgDllArguments>
+          <SimDlgDllArguments>-pDR8051</SimDlgDllArguments>
           <TargetDllName>S8051.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TP51.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pSST5X</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-p51</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -195,7 +195,7 @@
             <UseMultipleDPTR>0</UseMultipleDPTR>
             <UseOnchipXram>0</UseOnchipXram>
             <HadIRAM>1</HadIRAM>
-            <HadXRAM>0</HadXRAM>
+            <HadXRAM>1</HadXRAM>
             <HadIROM>1</HadIROM>
             <Moda2>0</Moda2>
             <Moddp2>0</Moddp2>
@@ -280,7 +280,7 @@
               <XRA>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
+                <Size>0x4000</Size>
               </XRA>
               <XRA512>
                 <Type>0</Type>
@@ -311,7 +311,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.\GPIO</IncludePath>
+              <IncludePath></IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -364,9 +364,19 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>EXAM1.C</FileName>
               <FileType>1</FileType>
-              <FilePath>.\GPIO\main.c</FilePath>
+              <FilePath>.\USB\U_DISK\EXAM1\EXAM1.C</FilePath>
+            </File>
+            <File>
+              <FileName>CH559UFX.LIB</FileName>
+              <FileType>4</FileType>
+              <FilePath>.\USB_LIB\CH559UFX.LIB</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO.C</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\GPIO.C</FilePath>
             </File>
           </Files>
         </Group>
