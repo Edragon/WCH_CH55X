@@ -1,0 +1,209 @@
+C51 COMPILER V9.60.0.0   GPIO                                                              03/06/2020 21:02:52 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE GPIO
+OBJECT MODULE PLACED IN GPIO.OBJ
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE GPIO.C LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          
+   2          /********************************** (C) COPYRIGHT *******************************
+   3          * File Name          : GPIO.C
+   4          * Author             : WCH
+   5          * Version            : V1.3
+   6          * Date               : 2016/6/24
+   7          * Description        : CH559µÄGPIO²Ù×÷£¬Ê¹ÓÃÊ±¿ÉÒÔ¼òµ¥²Ù×÷£¬Ö±½ÓÅäÖÃ
+   8                                 IOÅäÖÃÖ÷Òª¸úÒ»ÏÂ¼Ä´æÆ÷µÄ×´Ì¬ÓÐ¹ØÏµ
+   9                                 bPn_OC & Pn_DIR & Pn_PU: pin input & output configuration for Pn (n=0/1/2/3)
+  10                                 ÏêÏ¸½éÉÜÇë¿´CH559.HµÄ 457ÐÐ
+  11          *******************************************************************************/
+  12          #include "..\DEBUG.C"                                                          //µ÷ÊÔÐÅÏ¢´òÓ¡
+*** WARNING C318 IN LINE 12 OF GPIO.C: can't open file '..\DEBUG.C'
+  13          #include "..\DEBUG.H"
+*** WARNING C318 IN LINE 13 OF GPIO.C: can't open file '..\DEBUG.H'
+  14          
+  15          #pragma  NOAREGS
+  16          
+  17          /*******************************************************************************
+  18          * Function Name  : CH559GPIODrivCap(UINT8 Port,UINT8 Cap)
+  19          * Description    : ¶Ë¿Ú0¡¢1¡¢2¡¢3Çý¶¯ÄÜÁ¦ÉèÖÃ
+  20          * Input          : UINT8 Port¶Ë¿ÚÑ¡Ôñ(0¡¢1¡¢2¡¢3)
+  21                             UINT8 CapÇý¶¯ÄÜÁ¦Ñ¡Ôñ((0)5mA¡¢(1)20mA(×¢Òâ:P1¿ÚÊÇ10mA))
+  22          * Output         : None
+  23          * Return         : SUCCESS³É¹¦
+  24                             FAILÊ§°Ü
+  25          *******************************************************************************/
+  26          UINT8 CH559GPIODrivCap(UINT8 Port,UINT8 Cap)
+*** ERROR C129 IN LINE 26 OF GPIO.C: missing ';' before 'CH559GPIODrivCap'
+  27          {
+  28            if(Port >= 4){
+  29              return FAIL;
+  30            }
+  31            if(Cap == 0){                                                               //Çý¶¯µçÁ÷×î´ó5mA
+  32              PORT_CFG &= ~(bP0_DRV << Port);
+  33            }
+  34            else{   
+  35              PORT_CFG |= (bP0_DRV << Port);                                             //Çý¶¯µçÁ÷×î´ó20mA
+  36            }
+  37            return SUCCESS;
+  38          }
+  39          
+  40          /*******************************************************************************
+  41          * Function Name  : CH559GPIOModeSelt(UINT8 Port,UINT8 Mode,UINT8 PinNum)
+  42          * Description    : ¶Ë¿Ú0¡¢1¡¢2¡¢3Òý½ÅÄ£Ê½ÉèÖÃ
+  43          * Input          : UINT8 Port¶Ë¿ÚÑ¡Ôñ(0¡¢1¡¢2¡¢3)
+  44                             UINT8 CapÇý¶¯·½Ê½Ñ¡Ôñ(bPn_OC & Pn_DIR & Pn_PU)
+  45                             0(000)£º½öÊäÈë£¬ÎÞÉÏÀ­£»
+  46                             1(001)£º½öÊäÈë£¬´øÉÏÀ­£»
+  47                             2(01x)£ºÍÆÍìÊä³ö£¬¸ßµÍµçÆ½Ç¿Çý¶¯£»
+  48                             3(100)£º¿ªÂ©Êä³ö£¬ÎÞÉÏÀ­£¬Ö§³ÖÊäÈë£»
+  49                             4(110)£º¿ªÂ©Êä³ö£¬ÎÞÉÏÀ­,µ±×ª±äÊä³öÓÉµÍµ½¸ßÊ±£¬½öÇý¶¯2¸öÊ±ÖÓµÄ¸ßµçÆ½
+  50                             5(101)£º×¼Ë«Ïò(±ê×¼51Ä£Ê½)£¬¿ªÂ©Êä³ö£¬´øÉÏÀ­
+  51                             6(111)£º×¼Ë«Ïò(±ê×¼51Ä£Ê½)£¬¿ªÂ©Êä³ö£¬´øÉÏÀ­£¬µ±×ª±äÊä³öÓÉµÍµ½¸ßÊ±£¬½öÇý¶¯2¸öÊ±ÖÓµÄ¸ßµç
+             -Æ½
+C51 COMPILER V9.60.0.0   GPIO                                                              03/06/2020 21:02:52 PAGE 2   
+
+  52                             UINT8 PinNum(Òý½ÅÑ¡Ôñ0-7)
+  53          * Output         : None
+  54          * Return         : SUCCESS³É¹¦
+  55                             FAILÊ§°Ü
+  56          *******************************************************************************/
+  57          UINT8 CH559GPIOModeSelt(UINT8 Port,UINT8 Mode,UINT8 PinNum)
+  58          {
+  59            UINT8 Pn_DIR,Pn_PU;
+  60            if(Port >= 4){
+  61              return FAIL;
+  62            }
+  63          
+  64            switch (Mode){
+  65                case 0:                                                                //½öÊäÈë£¬ÎÞÉÏÀ­
+  66                  PORT_CFG &= ~(bP0_OC << Port);
+  67                  Pn_DIR &= ~(1<<PinNum);
+  68                  Pn_PU &= ~(1<<PinNum);
+  69                  break;
+  70                case 1:                                                                //½öÊäÈë£¬´øÉÏÀ­
+  71                  PORT_CFG &= ~(bP0_OC << Port);
+  72                  Pn_DIR &= ~(1<<PinNum);
+  73                  Pn_PU |= 1<<PinNum;
+  74                  break;
+  75                case 2:                                                                //ÍÆÍìÊä³ö£¬¸ßµÍµçÆ½Ç¿Çý¶¯
+  76                  PORT_CFG &= ~(bP0_OC << Port);
+  77                  Pn_DIR |= ~(1<<PinNum);
+  78                  break;
+  79                case 3:                                                                //¿ªÂ©Êä³ö£¬ÎÞÉÏÀ­£¬Ö§³ÖÊäÈë
+  80                  PORT_CFG |= (bP0_OC << Port);
+  81                  Pn_DIR &= ~(1<<PinNum);
+  82                  Pn_PU &= ~(1<<PinNum);
+  83                  break;
+  84                case 4:                                                                //¿ªÂ©Êä³ö£¬ÎÞÉÏÀ­,µ±×ª±äÊä³öÓ
+             -ÉµÍµ½¸ßÊ±£¬½öÇý¶¯2¸öÊ±ÖÓµÄ¸ßµçÆ½
+  85                  PORT_CFG |= (bP0_OC << Port);
+  86                  Pn_DIR |= 1<<PinNum;
+  87                  Pn_PU &= ~(1<<PinNum);
+  88                  break;
+  89                case 5:                                                                //Èõ×¼Ë«Ïò(±ê×¼51Ä£Ê½)£¬¿ªÂ©Êä
+             -³ö£¬´øÉÏÀ­
+  90                  PORT_CFG |= (bP0_OC << Port);
+  91                  Pn_DIR &= ~(1<<PinNum);
+  92                  Pn_PU |= 1<<PinNum;
+  93                  break;
+  94                case 6:                                                                //×¼Ë«Ïò(±ê×¼51Ä£Ê½)£¬¿ªÂ©Êä³ö
+             -£¬´øÉÏÀ­£¬µ±×ª±äÊä³öÓÉµÍµ½¸ßÊ±£¬½öÇý¶¯2¸öÊ±ÖÓµÄ¸ßµçÆ½
+  95                  PORT_CFG |= (bP0_OC << Port);
+  96                  Pn_DIR |= 1<<PinNum;
+  97                  Pn_PU |= 1<<PinNum;
+  98                  break;
+  99                default:
+ 100                  break;
+ 101            }
+ 102            if(Port == 0){
+ 103              P0_DIR = Pn_DIR;
+ 104              P0_PU = Pn_PU;
+ 105            }
+ 106            if(Port == 1){
+ 107              P1_DIR = Pn_DIR;
+ 108              P1_PU = Pn_PU;
+ 109            }
+ 110            if(Port == 2){
+C51 COMPILER V9.60.0.0   GPIO                                                              03/06/2020 21:02:52 PAGE 3   
+
+ 111              P2_DIR = Pn_DIR;
+ 112              P2_PU = Pn_PU;
+ 113            }
+ 114            if(Port == 3){
+ 115              P3_DIR = Pn_DIR;
+ 116              P3_PU = Pn_PU;
+ 117            }
+ 118            return SUCCESS;
+ 119          }
+ 120          
+ 121          /*******************************************************************************
+ 122          * Function Name  : CH559P4Mode()
+ 123          * Description    : CH559µÄP4¶Ë¿Ú³õÊ¼»¯£¬P4Ä¬ÈÏÊÇÊäÈë¿Ú
+ 124          * Input          : None
+ 125          * Output         : None
+ 126          * Return         : None
+ 127          *******************************************************************************/
+ 128          void CH559P4Mode( )
+ 129          {
+ 130            P4_DIR |= 0xff;                                                            //ÖÃ1ÉèÖÃÎªÊä³ö
+ 131            P4_PU |= 0xff;                                                             //Æô¶¯p4¿ÚÄÚ²¿ÉÏÀ­
+ 132            P4_CFG |= bP4_DRV;                                                         //¸ÃÎ»Îª0ÔòP4¿ÚÇý¶¯ÄÜÁ¦5mA,Îª1
+             -Ê±Îª20mA
+ 133          }
+ 134          
+ 135          /*******************************************************************************
+ 136          * Function Name  : CH559GPIOInterruptInit()
+ 137          * Description    : CH559GPIOÖÐ¶Ï³õÊ¼»¯£¬ÆäËûÒý½ÅÈçP5.5\P1.4\P0.3\P5.7\P4.1\RXD0ÉèÖÃÍ¬Àí
+ 138          * Input          : None
+ 139          * Output         : None
+ 140          * Return         : None
+ 141          *******************************************************************************/
+ 142          void CH559GPIOInterruptInit()
+ 143          {                                                      
+ 144            GPIO_IE &= ~bIE_IO_EDGE;                                                   //ÖÐ¶Ï·½Ê½Ñ¡Ôñ£¬¸ÃÎ»Îª0Ôò±íÊ¾I
+             -O¿ÚµçÆ½ÖÐ¶Ï£¬¸ÃÎ»Îª1Ôò±íÊ¾IO¿Ú±ßÑØÖÐ¶Ï
+ 145            GPIO_IE |= bIE_RXD1_LO;                                                    //Ê¹ÄÜRXD1Òý½ÅµÄÖÐ¶Ï,ÆäËûÒý½ÅÖ
+             -Ð¶ÏÉèÖÃÍ¬Àí
+ 146          }
+ 147          
+ 148          /*******************************************************************************
+ 149          * Function Name  : GPIOInterrupt(void)
+ 150          * Description    : GPIO ÖÐ¶Ï·þÎñ³ÌÐò
+ 151          * Input          : None
+ 152          * Output         : None
+ 153          * Return         : None   
+ 154          *******************************************************************************/
+ 155          void  GPIOInterrupt( void ) interrupt INT_NO_GPIO using 1                    //GPIOÖÐ¶Ï·þÎñ³ÌÐò,Ê¹ÓÃ¼Ä´æÆ÷×
+             -é1
+ 156          {  
+ 157              //RXD1_ = 1;
+ 158              printf("P5_IN %02X\n",(UINT16)P5_IN);                                     //bIO_INT_ACTÎªGPIOÖÐ¶Ï×´Ì¬Î
+             -»
+ 159              //IE_GPIO = 0;                                                            //Ê¹ÄÜGPIOÖÐ¶Ï
+ 160          }
+ 161          
+ 162          main( ) 
+ 163          {
+ 164          //  CfgFsys( );                                                                //CH559Ê±ÖÓÑ¡ÔñÅäÖÃ   
+ 165              mDelaymS(5);                                                              //µÈ´ýÄÚ²¿¾§ÕñÎÈ¶¨
+ 166              P4_DIR = 0xff;  
+ 167              
+C51 COMPILER V9.60.0.0   GPIO                                                              03/06/2020 21:02:52 PAGE 4   
+
+ 168              mInitSTDIO( );                                                             //´®¿Ú0,¿ÉÒÔÓÃÓÚµ÷ÊÔ
+ 169              printf("start ...\n");  
+ 170                                                                              
+ 171              XBUS_AUX |=  bALE_CLK_EN;                                                  //¹Ø±ÕRS485Ä£Ê½ RS485_EN = 
+             -0;
+ 172              SER1_IER |= bIER_PIN_MOD1| bIER_PIN_MOD0;                                  //ÖÐ¶ÏÊ¹ÄÜ¼Ä´æÆ÷£¬½ÅÎ»ÉèÖÃP
+             -2.6ºÍP2.7,TNOW(P2.5)
+ 173              RXD1_ = 1;
+ 174              CH559GPIOInterruptInit();
+ 175              IE_GPIO = 1;                                                               //Ê¹ÄÜGPIOÖÐ¶Ï
+ 176              EA  = 1;                                                                   //Ê¹ÄÜÈ«¾ÖÖÐ¶Ï 
+ 177              while(1){}
+ 178          }
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  1 ERROR(S)
