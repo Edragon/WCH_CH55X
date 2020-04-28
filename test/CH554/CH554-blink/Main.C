@@ -36,8 +36,6 @@ main( )
     {
         mDelaymS(500);
         LED=!LED;
-
-	 
         CH554UART1SendByte('R');
 
  
