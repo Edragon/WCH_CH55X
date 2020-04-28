@@ -1,9 +1,10 @@
-C51 COMPILER V9.02   DEBUG                                                                 05/15/2017 13:13:26 PAGE 1   
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/28/2020 22:42:23 PAGE 1   
 
 
-C51 COMPILER V9.02, COMPILATION OF MODULE DEBUG
-OBJECT MODULE PLACED IN Debug.OBJ
-COMPILER INVOKED BY: C:\Keilc51\C51\BIN\C51.EXE Debug.C BROWSE NOAREGS DEBUG OBJECTEXTEND
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DEBUG
+OBJECT MODULE PLACED IN .\Debug.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\src\Debug.C OPTIMIZE(8,SPEED) BROWSE NOAREGS INCDIR(..\src) DEBUG OBJ
+                    -ECTEXTEND PRINT(.\Debug.lst) TABS(2) OBJECT(.\Debug.obj)
 
 line level    source
 
@@ -16,7 +17,7 @@ line level    source
    7                               CH554主频修改、延时函数定义
    8                               串口0和串口1初始化
    9                               串口0和串口1的收发子函数
-  10                               看门狗初始化                                                                                
+  10                               看门狗初始化                    
   11          *******************************************************************************/
   12          
   13          #include "CH554.H"
@@ -31,23 +32,23 @@ line level    source
   22          * Output         : None
   23          * Return         : None
   24          *******************************************************************************/ 
-  25          void    CfgFsys( )  
+  25          void  CfgFsys( )  
   26          {
-  27   1      //              SAFE_MOD = 0x55;
-  28   1      //              SAFE_MOD = 0xAA;
+  27   1      //    SAFE_MOD = 0x55;
+  28   1      //    SAFE_MOD = 0xAA;
   29   1      //     CLOCK_CFG |= bOSC_EN_XT;                          //使能外部晶振
   30   1      //     CLOCK_CFG &= ~bOSC_EN_INT;                        //关闭内部晶振    
-  31   1                      SAFE_MOD = 0x55;
-  32   1                      SAFE_MOD = 0xAA;
-  33   1      //              CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x07;  // 32MHz     
-  34   1      //              CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x06;  // 24MHz     
-  35   1      //              CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x05;  // 16MHz     
-  36   1                      CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x04;  // 12MHz
-  37   1      //              CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x03;  // 6MHz      
-  38   1      //              CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x02;  // 3MHz      
-  39   1      //              CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x01;  // 750KHz    
-  40   1      //              CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x00;  // 187.5MHz          
-  41   1                      SAFE_MOD = 0x00;
+  31   1          SAFE_MOD = 0x55;
+  32   1          SAFE_MOD = 0xAA;
+  33   1      //    CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x07;  // 32MHz 
+  34   1      //    CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x06;  // 24MHz 
+  35   1      //    CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x05;  // 16MHz 
+  36   1          CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x04;  // 12MHz
+  37   1      //    CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x03;  // 6MHz  
+  38   1      //    CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x02;  // 3MHz  
+  39   1      //    CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x01;  // 750KHz  
+  40   1      //    CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x00;  // 187.5MHz    
+  41   1          SAFE_MOD = 0x00;
   42   1      }
   43          
   44          /*******************************************************************************
@@ -57,57 +58,57 @@ line level    source
   48          * Output         : None
   49          * Return         : None
   50          *******************************************************************************/ 
-  51          void    mDelayuS( UINT16 n )  // 以uS为单位延时
+  51          void  mDelayuS( UINT16 n )  // 以uS为单位延时
   52          {
   53   1      #ifdef  FREQ_SYS
-  54   1      #if             FREQ_SYS <= 6000000
-                              n >>= 2;
-C51 COMPILER V9.02   DEBUG                                                                 05/15/2017 13:13:26 PAGE 2   
+  54   1      #if   FREQ_SYS <= 6000000
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/28/2020 22:42:23 PAGE 2   
 
+                  n >>= 2;
               #endif
-  57   1      #if             FREQ_SYS <= 3000000
-                              n >>= 2;
+  57   1      #if   FREQ_SYS <= 3000000
+                  n >>= 2;
               #endif
-  60   1      #if             FREQ_SYS <= 750000
-                              n >>= 4;
+  60   1      #if   FREQ_SYS <= 750000
+                  n >>= 4;
               #endif
   63   1      #endif
-  64   1              while ( n ) {  // total = 12~13 Fsys cycles, 1uS @Fsys=12MHz
-  65   2                      ++ SAFE_MOD;  // 2 Fsys cycles, for higher Fsys, add operation here
+  64   1        while ( n ) {  // total = 12~13 Fsys cycles, 1uS @Fsys=12MHz
+  65   2          ++ SAFE_MOD;  // 2 Fsys cycles, for higher Fsys, add operation here
   66   2      #ifdef  FREQ_SYS
-  67   2      #if             FREQ_SYS >= 14000000
-                              ++ SAFE_MOD;
+  67   2      #if   FREQ_SYS >= 14000000
+                  ++ SAFE_MOD;
               #endif
-  70   2      #if             FREQ_SYS >= 16000000
-                              ++ SAFE_MOD;
+  70   2      #if   FREQ_SYS >= 16000000
+                  ++ SAFE_MOD;
               #endif
-  73   2      #if             FREQ_SYS >= 18000000
-                              ++ SAFE_MOD;
+  73   2      #if   FREQ_SYS >= 18000000
+                  ++ SAFE_MOD;
               #endif
-  76   2      #if             FREQ_SYS >= 20000000
-                              ++ SAFE_MOD;
+  76   2      #if   FREQ_SYS >= 20000000
+                  ++ SAFE_MOD;
               #endif
-  79   2      #if             FREQ_SYS >= 22000000
-                              ++ SAFE_MOD;
+  79   2      #if   FREQ_SYS >= 22000000
+                  ++ SAFE_MOD;
               #endif
-  82   2      #if             FREQ_SYS >= 24000000
-                              ++ SAFE_MOD;
+  82   2      #if   FREQ_SYS >= 24000000
+                  ++ SAFE_MOD;
               #endif
-  85   2      #if             FREQ_SYS >= 26000000
-                              ++ SAFE_MOD;
+  85   2      #if   FREQ_SYS >= 26000000
+                  ++ SAFE_MOD;
               #endif
-  88   2      #if             FREQ_SYS >= 28000000
-                              ++ SAFE_MOD;
+  88   2      #if   FREQ_SYS >= 28000000
+                  ++ SAFE_MOD;
               #endif
-  91   2      #if             FREQ_SYS >= 30000000
-                              ++ SAFE_MOD;
+  91   2      #if   FREQ_SYS >= 30000000
+                  ++ SAFE_MOD;
               #endif
-  94   2      #if             FREQ_SYS >= 32000000
-                              ++ SAFE_MOD;
+  94   2      #if   FREQ_SYS >= 32000000
+                  ++ SAFE_MOD;
               #endif
   97   2      #endif
-  98   2                      -- n;
-  99   2              }
+  98   2          -- n;
+  99   2        }
  100   1      }
  101          
  102          /*******************************************************************************
@@ -117,19 +118,19 @@ line level    source
  106          * Output         : None
  107          * Return         : None
  108          *******************************************************************************/
- 109          void    mDelaymS( UINT16 n )                                                  // 以mS为单位延时
+ 109          void  mDelaymS( UINT16 n )                                                  // 以mS为单位延时
  110          {
- 111   1              while ( n ) {
+ 111   1        while ( n ) {
  112   2      #ifdef  DELAY_MS_HW
-                              while ( ( TKEY_CTRL & bTKC_IF ) == 0 );
-                              while ( TKEY_CTRL & bTKC_IF );
+                  while ( ( TKEY_CTRL & bTKC_IF ) == 0 );
+                  while ( TKEY_CTRL & bTKC_IF );
               #else
- 116   2                      mDelayuS( 1000 );
- 117   2      #endif
-C51 COMPILER V9.02   DEBUG                                                                 05/15/2017 13:13:26 PAGE 3   
+ 116   2          mDelayuS( 1000 );
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/28/2020 22:42:23 PAGE 3   
 
- 118   2                      -- n;
- 119   2              }
+ 117   2      #endif
+ 118   2          -- n;
+ 119   2        }
  120   1      }                                         
  121          
  122          /*******************************************************************************
@@ -152,7 +153,7 @@ line level    source
  139          * Output         : None
  140          * Return         : None
  141          *******************************************************************************/
- 142          void    mInitSTDIO( )
+ 142          void  mInitSTDIO( )
  143          {
  144   1          UINT32 x;
  145   1          UINT8 x2; 
@@ -189,9 +190,9 @@ line level    source
  172          * Return         : SBUF
  173          *******************************************************************************/
  174          UINT8  CH554UART0RcvByte( )
- 175          {
-C51 COMPILER V9.02   DEBUG                                                                 05/15/2017 13:13:26 PAGE 4   
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/28/2020 22:42:23 PAGE 4   
 
+ 175          {
  176   1          while(RI == 0);                                                            //查询接收，中断方式可不用
  177   1          RI = 0;
  178   1          return SBUF;
@@ -206,10 +207,10 @@ line level    source
  187          *******************************************************************************/
  188          void CH554UART0SendByte(UINT8 SendDat)
  189          {
- 190   1              SBUF = SendDat;                                                              //查询发送，中断方式可不用下
+ 190   1        SBUF = SendDat;                                                              //查询发送，中断方式可不用下
              -面2条语句,但发送前需TI=0
- 191   1              while(TI ==0);
- 192   1              TI = 0;
+ 191   1        while(TI ==0);
+ 192   1        TI = 0;
  193   1      }
  194          
  195          /*******************************************************************************
@@ -219,7 +220,7 @@ line level    source
  199          * Output         : None
  200          * Return         : None
  201          *******************************************************************************/
- 202          void    UART1Setup( )
+ 202          void  UART1Setup( )
  203          {
  204   1         U1SM0 = 0;                                                                   //UART1选择8位数据位
  205   1         U1SMOD = 1;                                                                  //快速模式
@@ -250,12 +251,12 @@ line level    source
  230          *******************************************************************************/
  231          void CH554UART1SendByte(UINT8 SendDat)
  232          {
- 233   1              SBUF1 = SendDat;                                                             //查询发送，中断方式可不用下
+ 233   1        SBUF1 = SendDat;                                                             //查询发送，中断方式可不用下
              -面2条语句,但发送前需TI=0
- 234   1              while(U1TI ==0);
- 235   1              U1TI = 1;
-C51 COMPILER V9.02   DEBUG                                                                 05/15/2017 13:13:26 PAGE 5   
+ 234   1        while(U1TI ==0);
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/28/2020 22:42:23 PAGE 5   
 
+ 235   1        U1TI = 1;
  236   1      }
  237          
  238          /*******************************************************************************
@@ -274,7 +275,7 @@ line level    source
  251   1         if(mode){
  252   2           GLOBAL_CFG |= bWDOG_EN;                                                    //启动看门狗复位
  253   2         }
- 254   1         else GLOBAL_CFG &= ~bWDOG_EN;                                                    //启动看门狗仅仅作为定时器
+ 254   1         else GLOBAL_CFG &= ~bWDOG_EN;                                              //启动看门狗仅仅作为定时器
  255   1         SAFE_MOD = 0x00;                                                             //退出安全模式
  256   1         WDOG_COUNT = 0;                                                              //看门狗赋初值
  257   1      }
@@ -290,7 +291,7 @@ line level    source
  267          *******************************************************************************/
  268          void CH554WDTFeed(UINT8 tim)
  269          {
- 270   1         WDOG_COUNT = tim;                                                             //看门狗计数器赋值     
+ 270   1         WDOG_COUNT = tim;                                                             //看门狗计数器赋值 
  271   1      }
 
 

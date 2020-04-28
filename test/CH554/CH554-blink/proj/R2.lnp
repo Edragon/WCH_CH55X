@@ -1,0 +1,4 @@
+".\Debug.obj",
+".\GPIO.obj",
+".\Main.obj" 
+TO "R2" 
