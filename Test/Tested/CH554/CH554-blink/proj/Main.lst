@@ -1,0 +1,70 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              04/29/2020 10:58:21 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\src\Main.C OPTIMIZE(8,SPEED) BROWSE NOAREGS INCDIR(..\src) DEBUG OBJE
+                    -CTEXTEND PRINT(.\Main.lst) TABS(2) OBJECT(.\Main.obj)
+
+line level    source
+
+   1          
+   2          /********************************** (C) COPYRIGHT *******************************
+   3          
+   4          *******************************************************************************/
+   5          #include "CH554.H"
+   6          #include "Debug.H"
+   7          #include "GPIO.H"
+   8          
+   9          // for printf
+  10          #include <stdio.h>
+  11          
+  12          sbit  LED1=P1^4;
+  13          sbit  LED3=P3^3;
+  14          
+  15          
+  16          
+  17          main( )
+  18          {
+  19   1        CfgFsys();                                                                //CH554 ±÷”—°‘Ò≈‰÷√
+  20   1        mDelaymS(5);
+  21   1        
+  22   1        mInitSTDIO(); // init uart0
+  23   1        UART1Setup(); // init uart1
+  24   1        
+  25   1        Port1Cfg(1, 4);  // port 1 pin 4 P1^4
+  26   1        Port3Cfg(1, 3);  // port 3 pin 3 P3^3
+  27   1        
+  28   1        
+  29   1        while(1)
+  30   1        {
+  31   2          mDelaymS(500);
+  32   2          LED1=!LED1;
+  33   2          LED3=!LED3;
+  34   2          
+  35   2          
+  36   2          CH554UART1SendByte('R');
+  37   2          
+  38   2          CH554UART0SendByte('U'); // this is uart0
+  39   2          
+  40   2          printf("this is a print test...");
+  41   2          
+  42   2        }
+  43   1        
+  44   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     62    ----
+   CONSTANT SIZE    =     24    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.56.0.0   MAIN                                                              04/29/2020 10:58:21 PAGE 2   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
