@@ -5,6 +5,8 @@
 #include "CH554.H"
 #include "Debug.H"
 #include "GPIO.H"
+#include "UART1.H"
+
 
 // for printf
 #include <stdio.h>
@@ -16,11 +18,11 @@ sbit	LED3=P3^3;
 
 main( )
 {
-	CfgFsys();                                                                //CH554 ±÷”—°‘Ò≈‰÷√
+	CfgFsys();              //CH554 ±÷”—°‘Ò≈‰÷√
 	mDelaymS(5);
 	
 	mInitSTDIO(); // init uart0
-	UART1Setup(); // init uart1
+	UART1Init(); // init uart1
 	
 	Port1Cfg(1, 4);  // port 1 pin 4 P1^4
 	Port3Cfg(1, 3);  // port 3 pin 3 P3^3

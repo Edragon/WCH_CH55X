@@ -7,11 +7,11 @@
 * Description        : CH554 触摸按键中断和查询方式进行采集并报告当前采样通道按键状态，包含初始化和按键采样等演示函数  
                        串口输出按键状态
 *******************************************************************************/
-#include "..\Public\CH554.H"                                                   
-#include "..\Public\Debug.H"
+#include "CH554.H"                                                   
+#include "Debug.H"
 #include "TouchKey.H"
 #include "stdio.h"
-
+#include "GPIO.H"
 #pragma  NOAREGS
 
 /*******************************************************************************
@@ -29,26 +29,36 @@ Input channel as below:
 	1		|	1		|	1		|	Enable touch core	| no channel
 *******************************************************************************/
 
+sbit LED = P3^3;
+extern Key_DataBuf;
+
 void main()
 {
 	CfgFsys();																/* Freq = 12MHz. */
 	mDelaymS(5);
 
+	Port3Cfg(1, 3);  // port 3 pin 3 P3^3
+	
 	mInitSTDIO();															/* Baud 57600 bps. */
 	printf("Debug data:"__DATE__",Debug time:"__TIME__"\n");
 	
-	
-	// P1.4 ~ P1.7 use BIT4 ~ 7
 	TK_Init( BIT4+BIT5+BIT6+BIT7,  1, 0 );		/* Choose TIN2, TIN3, TIN4, TIN5 for touchkey input. enable interrupt. */
 	
-	// may not need
 	TK_SelectChannel(0);											/* NOTICE: ch is not compatible with the IO actually. */
-	//	EA = 1;																	  /* Enable global interrupt. */
+	
+//	EA = 1;																	  /* Enable global interruptt. */
 
+	
+	
 	while ( 1 )
 	{
-		// measure all four channels
-        TK_Measure();	
+		//LED=!LED;
+		//mDelaymS(1000);
+		
+		//function print the press status on debug uart0
+		TK_Measure();	
+		//printf("running..");
+		
 	}
 	
 }

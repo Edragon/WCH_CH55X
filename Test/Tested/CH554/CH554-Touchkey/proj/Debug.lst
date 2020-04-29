@@ -1,10 +1,10 @@
-C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 13:16:41 PAGE 1   
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 14:16:26 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DEBUG
 OBJECT MODULE PLACED IN .\Debug.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\src\Debug.C OPTIMIZE(8,SPEED) BROWSE NOAREGS INCDIR(..\src) DEBUG OBJ
-                    -ECTEXTEND PRINT(.\Debug.lst) TABS(2) OBJECT(.\Debug.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\src\Debug.C LARGE OPTIMIZE(8,SPEED) BROWSE NOAREGS INCDIR(..\src) DEB
+                    -UG OBJECTEXTEND PRINT(.\Debug.lst) TABS(2) OBJECT(.\Debug.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
               #endif
   53   1      #if FREQ_SYS == 187500  
                   CLOCK_CFG = CLOCK_CFG & ~ MASK_SYS_CK_SEL | 0x00;  // 187.5KHz  
-C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 13:16:41 PAGE 2   
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 14:16:26 PAGE 2   
 
               #endif
   56   1          SAFE_MOD = 0x00;
@@ -126,7 +126,7 @@ line level    source
  114   1        while ( n ) {
  115   2      #ifdef  DELAY_MS_HW
                   while ( ( TKEY_CTRL & bTKC_IF ) == 0 );
-C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 13:16:41 PAGE 3   
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 14:16:26 PAGE 3   
 
                   while ( TKEY_CTRL & bTKC_IF );
               #else
@@ -190,7 +190,7 @@ line level    source
  172          * Description    : CH554UART0接收一个字节
  173          * Input          : None
  174          * Output         : None
-C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 13:16:41 PAGE 4   
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 14:16:26 PAGE 4   
 
  175          * Return         : SBUF
  176          *******************************************************************************/
@@ -254,7 +254,7 @@ line level    source
  233          // /*******************************************************************************
  234          // * Function Name  : CH554SoftReset()
  235          // * Description    : CH554软复位
-C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 13:16:41 PAGE 5   
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/29/2020 14:16:26 PAGE 5   
 
  236          // * Input          : None
  237          // * Output         : None
@@ -289,11 +289,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    220    ----
+   CODE SIZE        =    252    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =   ----       5
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       5
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

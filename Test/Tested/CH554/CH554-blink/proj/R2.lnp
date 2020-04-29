@@ -1,4 +1,5 @@
 ".\Debug.obj",
 ".\GPIO.obj",
-".\Main.obj" 
+".\Main.obj",
+".\UART1.obj" 
 TO "R2" 

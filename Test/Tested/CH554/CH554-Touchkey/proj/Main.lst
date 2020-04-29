@@ -1,0 +1,90 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              04/29/2020 14:16:26 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\src\Main.C LARGE OPTIMIZE(8,SPEED) BROWSE NOAREGS INCDIR(..\src) DEBU
+                    -G OBJECTEXTEND PRINT(.\Main.lst) TABS(2) OBJECT(.\Main.obj)
+
+line level    source
+
+   1          
+   2          /********************************** (C) COPYRIGHT *******************************
+   3          * File Name          : Main.C
+   4          * Author             : WCH
+   5          * Version            : V1.2
+   6          * Date               : 2019/07/22
+   7          * Description        : CH554 ´¥Ãþ°´¼üÖÐ¶ÏºÍ²éÑ¯·½Ê½½øÐÐ²É¼¯²¢±¨¸æµ±Ç°²ÉÑùÍ¨µÀ°´¼ü×´Ì¬£¬°üº¬³õÊ¼»¯ºÍ°´¼ü²ÉÑ
+             -ùµÈÑÝÊ¾º¯Êý  
+   8                                 ´®¿ÚÊä³ö°´¼ü×´Ì¬
+   9          *******************************************************************************/
+  10          #include "CH554.H"                                                   
+  11          #include "Debug.H"
+  12          #include "TouchKey.H"
+  13          #include "stdio.h"
+  14          #include "GPIO.H"
+  15          #pragma  NOAREGS
+  16          
+  17          /*******************************************************************************
+  18          Input channel as below:
+  19          
+  20           bTKC_CHAN2 |bTKC_CHAN1 |bTKC_CHAN0 | CHANNEL       | PIN   
+  21           -----------+-----------+-----------+-----------------------+------------
+  22            0   | 0   | 0   | no channel      | ****    
+  23            0   | 0   | 1   | TIN0        | P1.0    
+  24            0   | 1   | 0   | TIN1        | P1.1    
+  25            0   | 1   | 1   | TIN2        | P1.4    
+  26            1   | 0   | 0   | TIN3        | P1.5    
+  27            1   | 0   | 1   | TIN4        | P1.6    
+  28            1   | 1   | 0   | TIN5        | P1.7    
+  29            1   | 1   | 1   | Enable touch core | no channel
+  30          *******************************************************************************/
+  31          
+  32          sbit LED = P3^3;
+  33          extern Key_DataBuf;
+  34          
+  35          void main()
+  36          {
+  37   1        CfgFsys();                                /* Freq = 12MHz. */
+  38   1        mDelaymS(5);
+  39   1      
+  40   1        Port3Cfg(1, 3);  // port 3 pin 3 P3^3
+  41   1        
+  42   1        mInitSTDIO();                             /* Baud 57600 bps. */
+  43   1        printf("Debug data:"__DATE__",Debug time:"__TIME__"\n");
+  44   1        
+  45   1        TK_Init( BIT4+BIT5+BIT6+BIT7,  1, 0 );    /* Choose TIN2, TIN3, TIN4, TIN5 for touchkey input. enable inter
+             -rupt. */
+  46   1        
+  47   1        TK_SelectChannel(0);                      /* NOTICE: ch is not compatible with the IO actually. */
+  48   1        
+  49   1      //  EA = 1;                                   /* Enable global interruptt. */
+  50   1      
+  51   1        
+  52   1        
+C51 COMPILER V9.56.0.0   MAIN                                                              04/29/2020 14:16:26 PAGE 2   
+
+  53   1        while ( 1 )
+  54   1        {
+  55   2          //LED=!LED;
+  56   2          //mDelaymS(1000);
+  57   2          TK_Measure(); 
+  58   2          //printf("running..");
+  59   2          
+  60   2        }
+  61   1        
+  62   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     48    ----
+   CONSTANT SIZE    =     44    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
