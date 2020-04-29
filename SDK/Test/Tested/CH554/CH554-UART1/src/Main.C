@@ -27,7 +27,8 @@ void main( )
     UART1Init( );                                                              //串口1初始化
 	while(1)
 	{
-		
+	
+	// UART1_INTERRUPT = 0 define in UART1.H
 	#if ( UART1_INTERRUPT == 0)                                                    //查询方式，收到一个字节，并转发出去
 			dat = CH554UART1RcvByte( );                                            //程序死等，直到收到一个字节
 			CH554UART1SendByte(dat);                                               //并通过串口1发回去
