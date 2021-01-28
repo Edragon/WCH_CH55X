@@ -9,6 +9,9 @@
 #include "Debug.H"
 #include "stdio.H"
 #include "TOUCHKEY.H"
+
+#include "main.h"
+
 /*******************************************************************************
 Input channel as below:
 
@@ -181,6 +184,7 @@ UINT8 TK_Measure( void )
 			 if((Press_Flag & (1<<i)) == 0) 
 			 {
 				printf("ch %d pressed,value:%d\n",(UINT16)num, Key_DataBuf[i]);
+				LED=!LED;
 			 }	
               Press_Flag |= (1<<i);			 
 		 }

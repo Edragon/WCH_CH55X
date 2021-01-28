@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   GPIO                                                              04/29/2020 14:16:26 PAGE 1   
+C51 COMPILER V9.56.0.0   GPIO                                                              05/06/2020 18:31:00 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE GPIO
@@ -62,7 +62,7 @@ line level    source
   52          /*******************************************************************************
   53          * Function Name  : Port3Cfg()
   54          * Description    : 端口3配置
-C51 COMPILER V9.56.0.0   GPIO                                                              04/29/2020 14:16:26 PAGE 2   
+C51 COMPILER V9.56.0.0   GPIO                                                              05/06/2020 18:31:00 PAGE 2   
 
   55          * Input          : Mode  0 = 浮空输入，无上拉
   56                                   1 = 推挽输入输出
@@ -126,7 +126,7 @@ line level    source
  112          { 
  113   1      #ifdef DE_PRINTF
  114   1            printf("GPIO_STATUS: %02x\n",(UINT16)(PIN_FUNC&bIO_INT_ACT));             
-C51 COMPILER V9.56.0.0   GPIO                                                              04/29/2020 14:16:26 PAGE 3   
+C51 COMPILER V9.56.0.0   GPIO                                                              05/06/2020 18:31:00 PAGE 3   
 
  115   1      #endif
  116   1      }

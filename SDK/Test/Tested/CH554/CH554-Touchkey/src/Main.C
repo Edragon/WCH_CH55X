@@ -29,7 +29,8 @@ Input channel as below:
 	1		|	1		|	1		|	Enable touch core	| no channel
 *******************************************************************************/
 
-sbit LED = P3^3;
+#include "main.h"
+
 extern Key_DataBuf;
 
 void main()
