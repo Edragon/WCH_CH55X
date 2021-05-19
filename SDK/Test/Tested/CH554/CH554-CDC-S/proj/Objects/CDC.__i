@@ -1,1 +1,0 @@
-"..\src\CDC.c" LARGE OPTIMIZE (8,SPEED) BROWSE INCDIR(..\src) DEBUG OBJECTEXTEND PRINT(.\Listings\CDC.lst) TABS (2) OBJECT(.\Objects\CDC.obj)

@@ -1,5 +1,0 @@
-".\Objects\Debug.obj",
-".\Objects\Main.obj",
-".\Objects\UART1.obj" 
-TO ".\Objects\uart-test" 
-PRINT(".\Listings\uart-test.m51") RAMSIZE(256) 

@@ -1,7 +1,0 @@
-".\Objects\DEBUG.obj",
-".\Objects\GPIO.obj",
-".\Objects\main.obj",
-".\Objects\CDC.obj",
-".\Objects\UART1.obj" 
-TO ".\Objects\CDC" 
-PRINT(".\Listings\CDC.m51") RAMSIZE(256) 

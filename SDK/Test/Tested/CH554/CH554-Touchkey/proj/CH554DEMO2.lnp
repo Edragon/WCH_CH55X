@@ -1,6 +1,0 @@
-".\Debug.obj",
-".\GPIO.obj",
-".\Main.obj",
-".\TouchKey.obj" 
-TO "CH554DEMO2" 
-RAMSIZE(256) 

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "Main.C": "cpp",
+        "PWM.C": "cpp"
+    }
+}
