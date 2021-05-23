@@ -7,8 +7,9 @@
 					   keyboard and mouse, and HID compatible device.
 ********************************************************************************/
 #include 	".\Public\CH554.H"
-#include	"Compound.h"
 #include 	".\Public\debug.h"
+#include	"Compound.h"
+
 #include ".\Touch_Key\Touch_Key.H"
 #include 	"stdio.h"
 

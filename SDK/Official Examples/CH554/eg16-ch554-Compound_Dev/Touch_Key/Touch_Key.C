@@ -59,7 +59,9 @@ UINT8 TouchKeyChanelSelect(UINT8 ch)
     IE_TKEY = 1;                                                               //使能Touch_Key中断
 #endif
     return SUCCESS;
+
 }
+
 
 #if INTERRUPT_TouchKey
 /*******************************************************************************
@@ -71,9 +73,11 @@ void	Touch_KeyInterrupt( void ) interrupt INT_NO_TKEY using 1                //T
     UINT16 KeyData;
     IE_TKEY = 0;                                                              //关中断	
     KeyData = TKEY_DAT;                                                       //保持87us,尽快取走
+
 #ifdef DE_PRINTF
       printf("DATA: %04x\n",KeyData&0x7FFF);
 #endif
+
 }
 #endif
 

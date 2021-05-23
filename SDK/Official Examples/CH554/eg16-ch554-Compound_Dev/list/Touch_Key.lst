@@ -1,0 +1,108 @@
+C51 COMPILER V9.60.0.0   TOUCH_KEY                                                         05/23/2021 18:41:00 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TOUCH_KEY
+OBJECT MODULE PLACED IN .\obj\Touch_Key.obj
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE Touch_Key\Touch_Key.C LARGE OPTIMIZE(6,SPEED) BROWSE DEBUG OBJECTEXTEND
+                    - PRINT(.\list\Touch_Key.lst) TABS(2) OBJECT(.\obj\Touch_Key.obj)
+
+line level    source
+
+   1          
+   2          /********************************** (C) COPYRIGHT *******************************
+   3          * File Name          : Touch_Key.C
+   4          * Author             : WCH
+   5          * Version            : V1.0
+   6          * Date               : 2017/01/20
+   7          * Description        : CH554 ´¥Ãþ°´¼ü²ÉÑù¼ä¸ôÉèÖÃ¡¢Í¨µÀÑ¡ÔñºÍÇÐ»»ºÍÖÐ¶Ï´¦Àíº¯Êý   
+   8          *******************************************************************************/
+   9          
+  10          #include "..\Public\CH554.H"                                                       
+  11          #include "..\Public\DEBUG.H"
+  12          #include "Touch_Key.H"
+  13          #include "stdio.h"
+  14          
+  15          #pragma  NOAREGS
+  16          
+  17          /*******************************************************************************
+  18          * Function Name  : TouchKeyQueryCylSet1Or2ms(UINT8 cyl)
+  19          * Description    : ´¥Ãþ°´¼ü²éÑ¯ÖÜÆÚÉèÖÃ
+  20          * Input          : UINT8 cyl Ê±ÖÓÉèÖÃ                                 
+  21                             1   2ms
+  22                             0   1ms                   
+  23          * Output         : None
+  24          * Return         : None
+  25          *******************************************************************************/
+  26          void TouchKeyQueryCylSet1Or2ms(UINT8 cyl)
+  27          {
+  28   1        if(cyl)
+  29   1        {
+  30   2          TKEY_CTRL |= bTKC_2MS;
+  31   2        }
+  32   1        else
+  33   1        {
+  34   2          TKEY_CTRL &= ~bTKC_2MS;
+  35   2        }
+  36   1      }
+  37          
+  38          /*******************************************************************************
+  39          * Function Name  : TouchKeyChanelSelect(UINT8 ch)
+  40          * Description    : ´¥Ãþ°´¼üÍ¨µÀÑ¡Ôñ
+  41          * Input          : UINT8 ch ²ÉÓÃÍ¨µÀ
+  42          * Output         : None
+  43          * Return         : ³É¹¦ SUCCESS
+  44                             Ê§°Ü FAIL
+  45          *******************************************************************************/
+  46          UINT8 TouchKeyChanelSelect(UINT8 ch)
+  47          {
+  48   1          TKEY_CTRL &= 0xF8;
+  49   1          if(ch == 0){;}                                                            //¹Ø±ÕµçÈÝ¼ì²â£¬½ö×÷1ms»òÕß2
+             -ms¶¨Ê±ÖÐ¶Ï
+  50   1          else if(ch == 1){P1_DIR_PU &= 0xFE; TKEY_CTRL |= 0x01;}                   //TIN0(P10)
+  51   1          else if(ch == 2){P1_DIR_PU &= 0xFD; TKEY_CTRL |= 0x02;}                   //TIN0(P11)
+  52   1          else if(ch == 3){P1_DIR_PU &= 0xEF; TKEY_CTRL |= 0x03;}                   //TIN0(P14)
+  53   1          else if(ch == 4){P1_DIR_PU &= 0xDF; TKEY_CTRL |= 0x04;}                   //TIN0(P15)
+C51 COMPILER V9.60.0.0   TOUCH_KEY                                                         05/23/2021 18:41:00 PAGE 2   
+
+  54   1          else if(ch == 5){P1_DIR_PU &= 0xBF; TKEY_CTRL |= 0x05;}                   //TIN0(P16)
+  55   1          else if(ch == 6){P1_DIR_PU &= 0x7F; TKEY_CTRL |= 0x06;}                   //TIN0(P17)
+  56   1          else if(ch == 7){TKEY_CTRL |= 0x07;}                                      //¿ªÆôµçÈÝ¼ì²â£¬µ«ÊÇ²»Á¬½ÓÍ¨
+             -µÀ
+  57   1          else return FAIL;
+  58   1      #if INTERRUPT_TouchKey
+                  IE_TKEY = 1;                                                               //Ê¹ÄÜTouch_KeyÖÐ¶Ï
+              #endif
+  61   1          return SUCCESS;
+  62   1      }
+  63          
+  64          #if INTERRUPT_TouchKey
+              /*******************************************************************************
+              * Function Name  : Touch_KeyInterrupt(void)
+              * Description    : Touch_Key ÖÐ¶Ï·þÎñ³ÌÐò
+              *******************************************************************************/
+              void  Touch_KeyInterrupt( void ) interrupt INT_NO_TKEY using 1                //Touch_KeyÖÐ¶Ï·þÎñ³ÌÐò,Ê¹ÓÃ¼
+             -Ä´æÆ÷×é1
+              { 
+                  UINT16 KeyData;
+                  IE_TKEY = 0;                                                              //¹ØÖÐ¶Ï  
+                  KeyData = TKEY_DAT;                                                       //±£³Ö87us,¾¡¿ìÈ¡×ß
+              #ifdef DE_PRINTF
+                    printf("DATA: %04x\n",KeyData&0x7FFF);
+              #endif
+              }
+              #endif
+  79          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    119    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,78 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/23/2021 18:41:00 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\obj\main.obj
+COMPILER INVOKED BY: C:\Keil_C51\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(6,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\list\m
+                    -ain.lst) TABS(2) OBJECT(.\obj\main.obj)
+
+line level    source
+
+   1          /********************************** (C) COPYRIGHT ******************************
+   2          * File Name          :Compound_Dev.C
+   3          * Author             : WCH
+   4          * Version            : V1.0
+   5          * Date               : 2017/03/15
+   6          * Description        : A demo for USB compound device created by CH554, support
+   7                       keyboard and mouse, and HID compatible device.
+   8          ********************************************************************************/
+   9          #include  ".\Public\CH554.H"
+  10          #include  ".\Public\debug.h"
+  11          #include  "Compound.h"
+  12          
+  13          #include ".\Touch_Key\Touch_Key.H"
+  14          #include  "stdio.h"
+  15          
+  16          extern UINT8  FLAG;                         // Trans complete flag
+  17          extern UINT8  EnumOK;                       // Enum ok flag
+  18          UINT16I   TouchKeyButton = 0;
+  19          
+  20          void main( void ) {
+  21   1        CfgFsys();                                //Configure sys
+  22   1        mDelaymS(5);                              //
+  23   1        mInitSTDIO( );                            // Init UART0
+  24   1      
+  25   1      #if DE_PRINTF
+                printf( "Start config.\r\n" );
+                printf( "Init USB device.\r\n" );
+              #endif
+  29   1        USBDeviceInit();                          // Configure the USB module,the Endpoint and the USB Interrupt
+  30   1        EA = 1;
+  31   1        UEP1_T_LEN = 0;                           // Reset the trans length register
+  32   1        UEP2_T_LEN = 0;
+  33   1        FLAG = 0;
+  34   1        EnumOK = 0;
+  35   1        TouchKeyQueryCylSet1Or2ms(1);             //set query cycle
+  36   1        TouchKeyChanelSelect(3);                  //set query chanel
+  37   1        while(1) {
+  38   2      
+  39   2          if( EnumOK == 1 ) {
+  40   3            HIDValueHandle();
+  41   3          } else {
+  42   3            if(TKEY_CTRL&bTKC_IF) {         //wait query finsh,max 2ms 获取键值基准值，多采样几次
+  43   4              TouchKeyButton = TKEY_DAT;      //
+  44   4      #ifdef DE_PRINTF
+  45   4              printf("A.=  %04x\n",TouchKeyButton&0x7FFF);
+  46   4      #endif
+  47   4            }
+  48   3          }
+  49   2        }
+  50   1      }
+  51          
+  52          /**************************** END *************************************/
+
+
+C51 COMPILER V9.60.0.0   MAIN                                                              05/23/2021 18:41:00 PAGE 2   
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     93    ----
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =      2    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

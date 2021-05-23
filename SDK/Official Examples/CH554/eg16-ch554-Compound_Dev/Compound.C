@@ -562,6 +562,8 @@ static void UploadData(void) {
 	for( i = 1; i < 64 ; i ++ )
 		HIDCom[i] += rand();
 }
+
+
 /*******************************************************************************
 * Function Name  : extern HIDValueHandle( void )
 * Description    : Upload the HID code
