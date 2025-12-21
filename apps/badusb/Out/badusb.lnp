@@ -1,0 +1,5 @@
+".\Out\DEBUG.obj",
+".\Out\Key.obj",
+".\Out\main..obj" 
+TO ".\Out\badusb" 
+PRINT(".\Lst\badusb.m51") RAMSIZE(256) 

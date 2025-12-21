@@ -1,0 +1,230 @@
+C51 COMPILER V9.57.0.0   MAIN_                                                             03/02/2021 14:51:08 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN_
+OBJECT MODULE PLACED IN .\Out\main..obj
+COMPILER INVOKED BY: D:\Maker\keil5\C51\BIN\C51.EXE main..c LARGE WARNINGLEVEL(0) OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(.\Lst\main..lst) OBJECT(.\Out\main..obj)
+
+line level    source
+
+   1          /**
+   2           * @file main..c
+   3           * @author Pomin (Q: 1637766030)
+   4           * @brief badusb, 仅供学习交流使用, 请勿用于任何对他人造成伤害的用途, 否则后果
+             -自负
+   5           * @date 2021-03-02
+   6           *
+   7           * @copyright Copyright (c) 2021
+   8           *
+   9          **/
+  10          #include "./Public/CH554.H"
+  11          #include "./Public/DEBUG.H"
+  12          #include "./USB/key.h"
+  13          #include <stdio.h>
+  14          
+  15          #define HID_KEY_CTRL HIDKey[0]   // Ctrl Shift Alt 三个键
+  16          #define HID_KEY_MAIN HIDKey[2]   // 主键盘
+  17          #define HID_KEY_SYS HIDKeyMUL[3] // 系统功能按键
+  18          #define KEY_Left_Control 0x01    // 多控制键可以用 | 连接比如 Ctrl+Alt 就是 KEY_Left_Control 
+             -| KEY_Left_Alt
+  19          #define KEY_Left_Shift 0x02      // 左Shift, 下面就不解释了
+  20          #define KEY_Left_Alt 0x04
+  21          #define KEY_Left_GUI 0x08
+  22          #define KEY_Right_Control 0x10
+  23          #define KEY_Right_Shift 0x20
+  24          #define KEY_Right_Alt 0x40
+  25          #define KEY_Right_GUI 0x80
+  26          
+  27          #define KEY_SYS_POWEROFF 0x81    // 关机
+  28          #define KEY_SYS_REST 0x82        // 休眠
+  29          #define KEY_SYS_WAKE 0x83        // 唤醒
+  30          
+  31          #define _NULL_ ((void *)0)       // 空指针
+  32          #define T0RH (UINT8X)(64535 >> 8)// T0高8位重载值 (1ms)
+  33          #define T0RL (UINT8X) 64535      // T0低8位重载值
+  34          
+  35          sbit led = P3 ^ 4;// 测试用LED
+  36          
+  37          void Init(void);
+  38          void KeyScan(void);
+  39          void ConfigT0(void);
+  40          void KeyAction(unsigned char keyCode);
+  41          /**
+  42           * @brief T0配置函数 (1ms)
+  43           *
+  44          **/
+  45          void ConfigT0(void) {
+  46   1          TMOD = ( TMOD & ~( bT0_GATE | bT0_CT | bT0_M1 ) ) | bT0_M0;//* 模式1，16 位定时/计数器
+  47   1          TH0 = T0RH;
+  48   1          TL0 = T0RL;
+  49   1          TF0 = 0;
+  50   1          ET0 = 1;
+  51   1          TR0 = 1;
+  52   1      }
+C51 COMPILER V9.57.0.0   MAIN_                                                             03/02/2021 14:51:08 PAGE 2   
+
+  53          /**
+  54           * @brief 按键动作函数
+  55           *
+  56           * @param mode
+  57          **/
+  58          void KeyAction(unsigned char mode)
+  59          {
+  60   1          switch(mode) {
+  61   2          case 0:
+  62   2              if(Ready) HIDValueHandleMul();
+  63   2              else USBDeviceInit();
+  64   2              break;
+  65   2          case 1:
+  66   2              if(Ready) HIDValueHandle();
+  67   2              else USBDeviceInit();
+  68   2              break;
+  69   2          default :
+  70   2              break;
+  71   2          }
+  72   1          mDelaymS(20);
+  73   1      }
+  74          
+  75          void Init(void) {
+  76   1          CfgFsys();          // CH552时钟选择16M配置
+  77   1          ConfigT0();         // 配置1ms T0中断
+  78   1          USBDeviceInit();    // USB设备模式初始化
+  79   1          EA = 1;             // 允许单片机中断
+  80   1          UEP1_T_LEN = 0;     // 预使用发送长度一定要清空
+  81   1          UEP2_T_LEN = 0;         // 清空端点2发送长度
+  82   1          FLAG = 0;           // 清空USB中断传输完成标志
+  83   1          Ready = 0;
+  84   1          LED_VALID = 1;      // 给一个默认值
+  85   1          PCON = 1;
+  86   1          led = 0;
+  87   1      }
+  88          // 大写锁定
+  89          void Capslk(void) {
+  90   1          // 先关闭大写锁定
+  91   1          HID_KEY_CTRL = KEY_Left_Shift;
+  92   1          HID_KEY_MAIN = KEY_NULL;
+  93   1          KeyAction(1);
+  94   1          mDelaymS(500);
+  95   1          HID_KEY_CTRL = KEY_Left_Shift;
+  96   1          HID_KEY_MAIN = KEY_NULL;
+  97   1          KeyAction(1);
+  98   1          mDelaymS(500);
+  99   1          // 打开大写锁定
+ 100   1          HID_KEY_CTRL = KEY_NULL;
+ 101   1          HID_KEY_MAIN = KEY_CAPS_LOCK;
+ 102   1          KeyAction(1);
+ 103   1          mDelaymS(500);
+ 104   1      }
+ 105          // 发送字符串到命令行
+ 106          char command[100];
+ 107          void str2cmd(const char *str) {
+ 108   1          while(*str != '\0') {
+ 109   2              // 1 - 9
+ 110   2              if((*str < ('9' + 1)) && (*str > ('0'))) {
+ 111   3                  HID_KEY_CTRL = KEY_Left_Shift;
+ 112   3                  HID_KEY_MAIN = *str - 19;      // 对应HID值 (数字)
+ 113   3                  KeyAction(1);
+ 114   3              } else if(*str == '0') {
+C51 COMPILER V9.57.0.0   MAIN_                                                             03/02/2021 14:51:08 PAGE 3   
+
+ 115   3                  HID_KEY_CTRL = KEY_Left_Shift;
+ 116   3                  HID_KEY_MAIN = KEY_0;
+ 117   3                  KeyAction(1);
+ 118   3              } else if((*str < ('Z' + 1)) && (*str > ('A' - 1))) {
+ 119   3                  HID_KEY_CTRL = KEY_NULL;
+ 120   3                  HID_KEY_MAIN = *str - 61;      // 对应HID值 (字母)
+ 121   3                  KeyAction(1);
+ 122   3              } else if((*str < ('z' + 1)) && (*str > ('a' - 1))) {
+ 123   3                  HID_KEY_CTRL = KEY_Left_Shift;
+ 124   3                  HID_KEY_MAIN = *str - 61 - 32; // 对应HID值 (字母)
+ 125   3                  KeyAction(1);
+ 126   3              } else if((*str == ' ')) {
+ 127   3                  HID_KEY_CTRL = KEY_NULL;
+ 128   3                  HID_KEY_MAIN = KEY_SPACE;      // 对应HID值 (空格)
+ 129   3                  KeyAction(1);
+ 130   3              } else if((*str == '-')) {
+ 131   3                  HID_KEY_CTRL = KEY_NULL;
+ 132   3                  HID_KEY_MAIN = KEY_SUB;        // 对应HID值 (-)
+ 133   3                  KeyAction(1);
+ 134   3              }
+ 135   2              str++;
+ 136   2          }
+ 137   1          HID_KEY_CTRL = KEY_NULL;
+ 138   1          HID_KEY_MAIN = KEY_ENTER;
+ 139   1          KeyAction(1);
+ 140   1      }
+ 141          #define sendCmd(str)       \
+ 142              sprintf(command, str); \
+ 143              str2cmd(command)
+ 144          
+ 145          UINT8 Status = 0;
+ 146          main(void) {
+ 147   1          UINT8X i;
+ 148   1          Init();
+ 149   1          // 等待连接
+ 150   1          while (1) {
+ 151   2              if (Ready) break;
+ 152   2              mDelaymS(500);
+ 153   2              led = ~led;
+ 154   2          }
+ 155   1          led = 0;
+ 156   1          // 连接完毕
+ 157   1          mDelaymS(500);
+ 158   1          // 打开大写锁定
+ 159   1          Capslk();
+ 160   1          mDelaymS(1000);
+ 161   1          // 打开运行
+ 162   1          HID_KEY_CTRL = KEY_Left_GUI;
+ 163   1          HID_KEY_MAIN = KEY_R;
+ 164   1          KeyAction(1);
+ 165   1          // 打开cmdC
+ 166   1          sendCmd("CMD");
+ 167   1          mDelaymS(500);
+ 168   1          // 发送命令
+ 169   1          sendCmd("echo HaHaHa");
+ 170   1          mDelaymS(200);
+ 171   1          sendCmd("echo HaHaHa");
+ 172   1          mDelaymS(200);
+ 173   1          sendCmd("echo HaHaHa");
+ 174   1          mDelaymS(200);
+ 175   1          sendCmd("echo HaHaHa");
+ 176   1          mDelaymS(200);
+C51 COMPILER V9.57.0.0   MAIN_                                                             03/02/2021 14:51:08 PAGE 4   
+
+ 177   1          sendCmd("echo HaHaHa");
+ 178   1          /*
+ 179   1          // 遍历关闭窗口
+ 180   1          i = 100;
+ 181   1          while(i--) {
+ 182   1              HID_KEY_CTRL = KEY_Left_Alt;
+ 183   1              HID_KEY_MAIN = KEY_TAB;
+ 184   1              KeyAction(1);
+ 185   1              mDelaymS(200);
+ 186   1              HID_KEY_CTRL = KEY_Left_Alt;
+ 187   1              HID_KEY_MAIN = KEY_F4;
+ 188   1              KeyAction(1);
+ 189   1              mDelaymS(200);
+ 190   1          }*/
+ 191   1          while(1);
+ 192   1      }
+ 193          /**T0中断函数 (提供心跳)**/
+ 194          void InterruptTimer0() interrupt INT_NO_TMR0 using 1
+ 195          {
+ 196   1          TH0 = T0RH;
+ 197   1          TL0 = T0RL;
+ 198   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    675    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =    101       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
